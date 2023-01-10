@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import './App.css'
 import axios from 'axios'
 import { getCookie } from './utils'
+import Notiflix from 'notiflix'
 
 function App() {
   const navigate = useNavigate()
@@ -12,6 +13,7 @@ function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn")
   const username = localStorage.getItem("username")
   const token = localStorage.getItem("token")
+  const headers = { headers: { 'x-access-token': token }}
 
   useEffect(() => {
     if(!isLoggedIn) {
@@ -20,11 +22,7 @@ function App() {
   }, [isLoggedIn])
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/users/getUser?username=${username}`, {
-      headers: {
-				'x-access-token': token
-			}
-    })
+    axios.get(`http://localhost:3001/users/getUser?username=${username}`, headers)
     .then(res => setTodos(res.data[0].todos))
     .catch(console.error)
 
@@ -35,6 +33,7 @@ function App() {
     localStorage.removeItem("username")
     localStorage.removeItem("token")
     navigate("/")
+    Notiflix.Notify.success('Logout Successfully')
   }
 
   const addTodo = () => {
@@ -42,15 +41,12 @@ function App() {
     axios.post(`http://localhost:3001/users/addTodos`, {
         username: username,
         todos: getTodo
-    }, {
-      headers: {
-				'x-access-token': token
-			}
-    })
+    }, headers)
     .then(res => {
       setTodos([...todos, res.data.result])
       document.getElementById("todoInput").value = ""
       setGetTodo("")
+      Notiflix.Notify.success('Todo Added Successfully')
     })
     .catch(console.error)
   }
@@ -59,22 +55,14 @@ function App() {
     axios.post(`http://localhost:3001/users/removeTodo`, {
         username: username,
         todo: todo
-    }, {
-      headers: {
-				'x-access-token': token
-			}
-    })
+    }, headers)
     .then(res => {
       const newTodos = todos.filter(todo => todo != res.data.result)
       setTodos(newTodos)
+      Notiflix.Notify.success('Todo Removed Successfully')
     })
     .catch(console.error)
   }
-
-  // TODO
-  // - Refactor code (Redundant functions)
-  // - Add modals/notif
-  // - Logout UI
 
   return (
     <div className="App">

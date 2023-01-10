@@ -2,6 +2,7 @@ import axios from 'axios'
 import { atom, useAtom } from 'jotai'
 import {useEffect} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Notiflix from 'notiflix';
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -12,8 +13,6 @@ export const Login = () => {
       return navigate("/")
      }
   }, [])
-  
-  
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -31,10 +30,10 @@ export const Login = () => {
       localStorage.setItem("isLoggedIn", true);
       localStorage.setItem("username", username);
       localStorage.setItem("token", response.data.accessToken);
+      Notiflix.Notify.success('Login Successfully')
       navigate("/")
-      alert(response.data.message)
     })
-    .catch((err) => alert("Error Login"))
+    .catch((err) => Notiflix.Notify.failure('Login Error'))
   }
   return (
     <div className="absolute inset-0 grid items-center justify-center">
@@ -42,7 +41,7 @@ export const Login = () => {
         <h1 className="text-2xl mb-4">Todo App</h1>
         <form className="flex flex-col" onSubmit={onSubmit} id="form">
           <input type="text" name="username" placeholder="username" className="p-2 rounded-lg mb-2"/>
-          <input type="text" name="password" placeholder="password" className="p-2 rounded-lg mb-2" />
+          <input type="password" name="password" placeholder="password" className="p-2 rounded-lg mb-2" />
           <button type="submit" className="bg-green-500 rounded-lg py-2 mb-4">Login</button>
         </form>
         <p className="text-sm">Create account <Link to="/signup" className="text-blue-200 text-underline">here</Link></p>
