@@ -22,7 +22,7 @@ export const Login = () => {
     if(!username || !password) return
     console.log(username, password)
 
-    axios.post('http://localhost:3001/users/login', {
+    axios.post(`${import.meta.env.VITE_ENDPOINT}/users/login`, {
       username: username,
       password: password
     })

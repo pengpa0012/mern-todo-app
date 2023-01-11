@@ -23,7 +23,7 @@ function App() {
   }, [isLoggedIn])
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/users/getUser?username=${username}`, headers)
+    axios.get(`${import.meta.env.VITE_ENDPOINT}/users/getUser?username=${username}`, headers)
     .then(res => setTodos(res.data[0].todos))
     .catch(console.error)
 
@@ -40,7 +40,7 @@ function App() {
 
   const addTodo = () => {
     if(!getTodo) return
-    axios.post(`http://localhost:3001/users/addTodos`, {
+    axios.post(`${import.meta.env.VITE_ENDPOINT}/users/addTodos`, {
         username: username,
         todos: getTodo
     }, headers)
@@ -54,7 +54,7 @@ function App() {
   }
 
   const removeTodo = (username, todo) => {
-    axios.post(`http://localhost:3001/users/removeTodo`, {
+    axios.post(`${import.meta.env.VITE_ENDPOINT}/users/removeTodo`, {
         username: username,
         todo: todo
     }, headers)

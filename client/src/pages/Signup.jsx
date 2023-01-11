@@ -22,7 +22,7 @@ export const Signup = () => {
     const repeatPassword = form.elements['repeatPassword'].value
     if(!username || !password) return
     if(password !== repeatPassword) return Notiflix.Notify.failure("Password does not matched")
-    axios.post('http://localhost:3001/users/signup', {
+    axios.post(`${import.meta.env.VITE_ENDPOINT}/users/signup`, {
       username: username,
       password: password
     })
